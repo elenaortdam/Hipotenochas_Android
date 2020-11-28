@@ -1,7 +1,5 @@
 package com.iesribera.tarea2_elena_ortiz;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -16,21 +14,24 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.iesribera.tarea2_elena_ortiz.nivel.Nivel;
 import com.iesribera.tarea2_elena_ortiz.nivel.NivelAvanzado;
 import com.iesribera.tarea2_elena_ortiz.nivel.NivelFacil;
 import com.iesribera.tarea2_elena_ortiz.nivel.NivelIntermedio;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private List<Button> hipotenochas;
+    private final Set<String> descubiertas = new HashSet<>();
     private GridLayout grid;
     private Nivel nivel = new NivelFacil();
     private Casilla[][] casillas;
-    private int dificultad = 0;
+    private final int dificultad = 0;
     private int width;
     private int height;
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        crearPartida(nivel);
+        nuevaPartida();
     }
 
     @Override
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         nuevaPartida();
                     }
                 });
-        ;
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -113,12 +113,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         grid = findViewById(R.id.grid);
         grid.removeAllViews();
         casillas = crearPartida(nivel);
+        //TODO: borrar
         Tablero tablero = new Tablero(casillas);
         System.out.println(tablero);
     }
 
     public Casilla[][] crearPartida(Nivel nivel) {
-        hipotenochas = new ArrayList<Button>();
         grid = findViewById(R.id.grid);
         grid.setColumnCount(nivel.getColumnas());
         grid.setRowCount(nivel.getFilas());
@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return casillas;
     }
 
+    //TODO: modificar
     public void toma() {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -174,11 +175,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boton.setTextColor(Color.BLACK);
         if (boton.getText().equals("0")) {
             descubrirCelda(boton);
-            int[] posicion = obtenerPosicion((String) boton.getTag());
+            String coordenada = (String) boton.getTag();
+            descubiertas.add(coordenada);
+            int[] posicion = obtenerPosicion(coordenada);
             int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas, posicion[0], posicion[1]);
             if (hipotenochas == 0) {
                 boton.setText("");
                 boton.setBackgroundColor(Color.RED);
+                for (int i = 0; i < grid.getChildCount(); i++) {
+                    ArrayList<String> hecho = new ArrayList<>();
+                    despejar(boton, hecho);
+                }
             } else {
                 boton.setText(String.valueOf(hipotenochas));
             }
@@ -188,6 +195,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             boton.setBackgroundResource(R.mipmap.oreo_foreground);
             Toast.makeText(MainActivity.this,
                     R.string.derrota, Toast.LENGTH_LONG).show();
+        }
+    }
+/*
+    private boolean despejar(int[] posicion, int i) {
+        Button siguienteCasilla = (Button) grid.getChildAt(i);
+        int[] posicionHijo = obtenerPosicion((String) siguienteCasilla.getTag());
+        if (posicionHijo == posicion) {
+            return true;
+        } else if (posicionHijo[0] == posicion[0] + 1 || posicionHijo[0] == posicion[0] - 1) {
+            onClick(siguienteCasilla);
+        } else if (posicionHijo[1] == posicion[1] + 1 || posicionHijo[1] == posicion[1] - 1) {
+            onClick(siguienteCasilla);
+        }
+        return false;
+    }
+
+ */
+
+    public void despejar(Button boton, ArrayList<String> despejadas) {
+        for (String coordenada : despejadas) {
+            if (coordenada.equals(boton.getTag())) return;
+        }
+        despejadas.add((String) boton.getTag());
+        boton.setEnabled(false);
+        int[] posicion = obtenerPosicion((String) boton.getTag());
+        for (int i = 0; i < grid.getChildCount(); i++) {
+            Button botonHijo = (Button) grid.getChildAt(i);
+            int[] posicionHijo = obtenerPosicion((String) grid.getChildAt(i).getTag());
+            int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas, posicionHijo[0], posicionHijo[1]);
+            if (hipotenochas == 0) {
+                if (posicion[0] == posicionHijo[0] & (posicion[1] == (1 + posicionHijo[1])
+                        || posicion[1] == (posicionHijo[1] - 1))) {
+                    botonHijo.setBackgroundColor(Color.RED);
+                    botonHijo.setText("");
+                    despejar(botonHijo, despejadas);
+                }
+                if (posicion[1] == posicionHijo[1] & (posicion[0] == (1 + posicionHijo[0]) || posicion[0] == (posicionHijo[0] - 1))) {
+                    botonHijo.setBackgroundColor(Color.RED);
+                    botonHijo.setText("");
+                    despejar(botonHijo, despejadas);
+                }
+            }
         }
     }
 
