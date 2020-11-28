@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">¡Encuentra las Hipotenochas!</string>
+    <string name="instrucciones">Instrucciones</string>
+    <string name="instrucciones_texto">
+        ¿Alguna vez has jugado al buscaminas? Pues esto es igual.
+        Pulsas una casilla y desvela el número de "minas" que tiene alrededor, pero ¡CUIDADO! si
+        la casilla tiene una mina ¡HABRÁS PERDIDO!. Si crees que una casilla contiene una mina
+        haz click largo sobre ella para marcarla
+        ¿Cuándo gano? Cuando marques todas las minas del nivel y no caigas en ninguna de ellas ;)
+        Parece fácil ¿verdad? Por qué no lo intentas…
+       </string>
+    <string name="nuevo_juego">Nuevo juego</string>
+    <string name="configurar">Configurar el juego</string>
+    <string name="titulo_nivel">Dificultad</string>
+    <string name="selecciona_incognita">Seleccionar incognita</string>
+    <string name="incognita">Incognita</string>
+    <string name="volver">Volver</string>
+    <string name="restantes">Incógnitas restantes: </string>
+    <string name="victoria">¡Victoria!</string>
+    <string name="derrota">Vaya...Has perdido...</string>
+    <string-array name="n_incognitas">
+        <item>x</item>
+        <item>y</item>
+        <item>z</item>
+    </string-array>
+</resources>
