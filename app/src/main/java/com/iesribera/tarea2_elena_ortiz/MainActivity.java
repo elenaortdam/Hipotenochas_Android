@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Nivel nivel = new NivelFacil();
     private Casilla[][] casillas;
     private final int dificultad = 0;
+    int personaje = 0;
+    static ArrayList<Button> personajes = new ArrayList<>();
     private int width;
     private int height;
 
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 seleccionarNivel();
                 return true;
             case R.id.selec_personaje:
-//                showPer();
+                mostrarPersonajes();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -107,6 +109,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             throw new IllegalArgumentException("Ha ocurrido un error al detectar el nivel");
         }
         return nivel;
+    }
+
+    public void mostrarPersonajes() {
+        Personaje selecPersonaje = new Personaje();
+        selecPersonaje.show(getFragmentManager(), null);
+    }
+
+    public void setPersonaje(int i) {
+        personaje = i;
+        for (Button boton : personajes) {
+            seleccionarPersonaje(boton);
+        }
+    }
+
+    public void seleccionarPersonaje(Button boton) {
+        switch (personaje) {
+            case 0:
+                boton.setBackgroundResource(R.drawable.android_oreo);
+                break;
+            case 1:
+                boton.setBackgroundResource(R.drawable.android_kitkat);
+                break;
+            case 2:
+                boton.setBackgroundResource(R.drawable.android_gingerbread);
+                break;
+        }
+        boton.setText("");
     }
 
     public void nuevaPartida() {
@@ -169,8 +198,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.show();
     }
 
-    public void onClick(View v) {
-        Button boton = (Button) v;
+    public void onClick(View view) {
+        Button boton = (Button) view;
         boton.setEnabled(false);
         boton.setTextColor(Color.BLACK);
         if (boton.getText().equals("0")) {
@@ -197,21 +226,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     R.string.derrota, Toast.LENGTH_LONG).show();
         }
     }
-/*
-    private boolean despejar(int[] posicion, int i) {
-        Button siguienteCasilla = (Button) grid.getChildAt(i);
-        int[] posicionHijo = obtenerPosicion((String) siguienteCasilla.getTag());
-        if (posicionHijo == posicion) {
-            return true;
-        } else if (posicionHijo[0] == posicion[0] + 1 || posicionHijo[0] == posicion[0] - 1) {
-            onClick(siguienteCasilla);
-        } else if (posicionHijo[1] == posicion[1] + 1 || posicionHijo[1] == posicion[1] - 1) {
-            onClick(siguienteCasilla);
-        }
-        return false;
-    }
-
- */
 
     public void despejar(Button boton, ArrayList<String> despejadas) {
         for (String coordenada : despejadas) {

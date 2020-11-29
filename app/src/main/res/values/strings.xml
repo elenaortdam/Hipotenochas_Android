@@ -13,14 +13,19 @@
     <string name="configurar">Configurar el juego</string>
     <string name="titulo_nivel">Dificultad</string>
     <string name="selecciona_incognita">Seleccionar incognita</string>
-    <string name="incognita">Incognita</string>
+    <string name="personaje">Incognita</string>
     <string name="volver">Volver</string>
     <string name="restantes">Incógnitas restantes: </string>
     <string name="victoria">¡Victoria!</string>
     <string name="derrota">Vaya...Has perdido...</string>
-    <string-array name="n_incognitas">
-        <item>x</item>
-        <item>y</item>
-        <item>z</item>
+    <string-array name="personaje">
+        <item>Oreo</item>
+        <item>Kitkat</item>
+        <item>Gingerbread</item>
     </string-array>
+    <integer-array name="imagenes">
+        <item>@drawable/android_oreo</item>
+        <item>@drawable/android_kitkat</item>
+        <item>@drawable/android_gingerbread</item>
+    </integer-array>
 </resources>

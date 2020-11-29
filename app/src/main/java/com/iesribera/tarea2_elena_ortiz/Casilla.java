@@ -5,6 +5,7 @@ public class Casilla {
 	private byte tieneHipotenocha;
 	private int hipotenochasAlrededor;
 
+
 	public Casilla(byte tieneHipotenocha) {
 		this.tieneHipotenocha = tieneHipotenocha;
 	}
