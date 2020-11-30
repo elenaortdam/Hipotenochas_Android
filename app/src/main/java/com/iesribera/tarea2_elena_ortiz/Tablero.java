@@ -6,9 +6,16 @@ import java.util.Random;
 
 public class Tablero {
 
-    private final Casilla[][] casillas;
-
+    private final int[][] casillas;
+//    private final Casilla[][] casillas;
+/*
     public Tablero(Casilla[][] casillas) {
+        this.casillas = casillas;
+    }
+
+ */
+
+    public Tablero(int[][] casillas) {
         this.casillas = casillas;
     }
 
@@ -16,27 +23,27 @@ public class Tablero {
         casillas = crearTablero(nivel).getCasillas();
     }
 
-    public Casilla[][] getCasillas() {
+    public int[][] getCasillas() {
         return casillas;
     }
 
     public Tablero crearTablero(Nivel nivel) {
-        Casilla[][] casillas = new Casilla[nivel.getColumnas()][nivel.getFilas()];
+        int[][] casillas = new int[nivel.getColumnas()][nivel.getFilas()];
         int hipotenochasTotales = 0;
         for (int i = 0; i < nivel.getColumnas(); i++) {
             int maxHipotenochasFila = nivel.getHipotenochasOcultas() / nivel.getFilas();
             int hipotenochasCreadas = 0;
             int numeroRandom = getRandomNumber(0, nivel.getColumnas() - 1);
             for (int j = 0; j < nivel.getFilas(); j++) {
-                casillas[i][j] = new Casilla((byte) 0);
+                casillas[i][j] = 0;
                 if (hipotenochasTotales < nivel.getHipotenochasOcultas()
                         && hipotenochasCreadas < maxHipotenochasFila
                         && j == numeroRandom) {
-                    casillas[i][j] = new Casilla((byte) 1);
+                    casillas[i][j] = 1;
                     hipotenochasTotales++;
                     hipotenochasCreadas++;
                 } else {
-                    casillas[i][j] = new Casilla((byte) 0);
+                    casillas[i][j] = 0;
                 }
 
             }
@@ -52,9 +59,9 @@ public class Tablero {
         return tablero;
     }
 
-    private void asignarHipotenochas(Casilla[][] casillas, int i, int j) {
-        if (casillas[i][j].getTieneHipotenocha() == 0) {
-            casillas[i][j].setHipotenocha((byte) 1);
+    private void asignarHipotenochas(int[][] casillas, int i, int j) {
+        if (casillas[i][j] == 0) {
+            casillas[i][j] = 1;
         } else {
             try {
                 asignarHipotenochas(casillas, i, j + 1);
@@ -68,7 +75,7 @@ public class Tablero {
         Random random = new Random();
         return random.nextInt(max - min) + min;
     }
-
+/*
 	@Override public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Casilla[] casilla : casillas) {
@@ -79,4 +86,6 @@ public class Tablero {
 		}
 		return stringBuilder.toString();
 	}
+
+ */
 }

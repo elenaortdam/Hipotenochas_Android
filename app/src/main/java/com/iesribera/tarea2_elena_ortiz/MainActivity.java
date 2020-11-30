@@ -1,17 +1,21 @@
 package com.iesribera.tarea2_elena_ortiz;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,17 +27,20 @@ import com.iesribera.tarea2_elena_ortiz.nivel.NivelIntermedio;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private final ArrayList<Personaje> personajes = new ArrayList<>();
+    private Drawable imagenPersonaje;
     private final Set<String> descubiertas = new HashSet<>();
     private GridLayout grid;
+    private Tablero tablero;
     private Nivel nivel = new NivelFacil();
     private Casilla[][] casillas;
     private final int dificultad = 0;
     int personaje = 0;
-    static ArrayList<Button> personajes = new ArrayList<>();
     private int width;
     private int height;
 
@@ -41,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Personaje oreo = new Personaje("Oreo", getDrawable(R.mipmap.oreo));
+        Personaje ginger = new Personaje("Kitkat", getDrawable(R.mipmap.gingerbread));
+        personajes.add(oreo);
+        personajes.add(ginger);
         nuevaPartida();
     }
 
@@ -64,10 +75,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 seleccionarNivel();
                 return true;
             case R.id.selec_personaje:
-                mostrarPersonajes();
+                elegirPersonaje();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void elegirPersonaje() {
+        final Dialog personaje = new Dialog(this);
+        personaje.setContentView(R.layout.personaje);
+        personaje.setTitle("Personajes");
+
+        Spinner sp = personaje.findViewById(R.id.spinner_personaje);
+        PersonajeAdapter pa = new PersonajeAdapter(this, personajes);
+        sp.setAdapter(pa);
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Personaje seleccionado = (Personaje) adapterView.getAdapter().getItem(i);
+                setImagenPersonaje(seleccionado.getImagen());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        //todo: ver
+//        Button ok = personaje.findViewById(R.id.btnPersonajeOk);
+        /*
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                personaje.dismiss();
+            }
+        });
+
+         */
+
+        personaje.show();
+    }
+
+    public Drawable getImagenPersonaje() {
+        return imagenPersonaje;
+    }
+
+    public void setImagenPersonaje(Drawable imagenPersonaje) {
+        this.imagenPersonaje = imagenPersonaje;
     }
 
     public void seleccionarNivel() {
@@ -110,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return nivel;
     }
-
+/*
     public void mostrarPersonajes() {
         Personaje selecPersonaje = new Personaje();
         selecPersonaje.show(getFragmentManager(), null);
@@ -122,6 +177,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             seleccionarPersonaje(boton);
         }
     }
+
+ */
 
     public void seleccionarPersonaje(Button boton) {
         switch (personaje) {
@@ -139,35 +196,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void nuevaPartida() {
-        grid = findViewById(R.id.grid);
-        grid.removeAllViews();
+        tablero = new Tablero(nivel);
         casillas = crearPartida(nivel);
-        //TODO: borrar
-        Tablero tablero = new Tablero(casillas);
-        System.out.println(tablero);
     }
 
     public Casilla[][] crearPartida(Nivel nivel) {
         grid = findViewById(R.id.grid);
+        grid.removeAllViews();
         grid.setColumnCount(nivel.getColumnas());
         grid.setRowCount(nivel.getFilas());
-        Tablero tablero = new Tablero(nivel);
-        casillas = tablero.getCasillas();
+        casillas = new Casilla[nivel.getColumnas()][nivel.getFilas()];
         toma();
         Button boton;
+        int numeroCasilla = 0;
         for (int i = 0; i < nivel.getColumnas(); i++) {
             for (int j = 0; j < nivel.getFilas(); j++) {
-                boton = new Button(this);
-                boton.setLayoutParams(new ViewGroup.LayoutParams(width / nivel.getColumnas(),
+                casillas[i][j] = new Casilla(this, i, j, (byte) tablero.getCasillas()[i][j]);
+                casillas[i][j].setLayoutParams(new ViewGroup.LayoutParams(width / nivel.getColumnas(),
                         ((height) / nivel.getFilas())));
-                boton.setText(String.valueOf(casillas[i][j].getTieneHipotenocha()));
-                boton.setPadding(0, 0, 0, 0);
-                boton.setBackgroundResource(R.drawable.my_button_bg);
-                boton.setTextColor(Color.BLACK);
-                boton.setTag(i + "," + j);
-                boton.setOnClickListener(this);
+//                boton = new Button(this);
+//                boton.setLayoutParams(new ViewGroup.LayoutParams(width / nivel.getColumnas(),
+//                        ((height) / nivel.getFilas())));
+                casillas[i][j].setText(String.valueOf(tablero.getCasillas()[i][j]));
+                casillas[i][j].setPadding(0, 0, 0, 0);
+                casillas[i][j].setBackgroundResource(R.drawable.my_button_bg);
+                casillas[i][j].setTextColor(Color.BLACK);
+                casillas[i][j].setTag(i + "," + j);
+//                boton.setTag(i + "," + j);
+//                boton.setTag(1, i + "," + j);
+                casillas[i][j].setOnClickListener(this);
 //                boton.setOnLongClickListener(this);
-                grid.addView(boton);
+                grid.addView(casillas[i][j]);
             }
         }
         return casillas;
@@ -199,32 +258,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View view) {
-        Button boton = (Button) view;
-        boton.setEnabled(false);
-        boton.setTextColor(Color.BLACK);
-        if (boton.getText().equals("0")) {
-            descubrirCelda(boton);
-            String coordenada = (String) boton.getTag();
-            descubiertas.add(coordenada);
-            int[] posicion = obtenerPosicion(coordenada);
-            int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas, posicion[0], posicion[1]);
+        Casilla casilla = (Casilla) view;
+        casilla.setEnabled(false);
+        casilla.setTextColor(Color.BLACK);
+        if (casilla.getText().equals("0")) {
+            descubrirCelda(casilla);
+//            String coordenada = (String) boton.getTag();
+//            descubiertas.add(coordenada);
+//            int[] posicion = obtenerPosicion(coordenada);
+
+            int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas, casilla.getFila(), casilla.getColumna());
             if (hipotenochas == 0) {
-                boton.setText("");
-                boton.setBackgroundColor(Color.RED);
-                for (int i = 0; i < grid.getChildCount(); i++) {
-                    ArrayList<String> hecho = new ArrayList<>();
-                    despejar(boton, hecho);
-                }
+                List<Casilla> despejadas = new ArrayList<>();
+                do {
+                    despejadas = despejar(casilla);
+                } while (!despejadas.isEmpty());
+
             } else {
-                boton.setText(String.valueOf(hipotenochas));
+                casilla.setText(String.valueOf(hipotenochas));
             }
         } else {
 //            inabilitar();
-            boton.setText("");
-            boton.setBackgroundResource(R.mipmap.oreo_foreground);
+            casilla.setText("");
+            casilla.setBackgroundResource(R.mipmap.oreo_foreground);
             Toast.makeText(MainActivity.this,
                     R.string.derrota, Toast.LENGTH_LONG).show();
         }
+    }
+
+    public List<Casilla> despejar(Casilla casilla) {
+        List<Casilla> casillasDespejadas = new ArrayList<>();
+        for (int i = casilla.getColumna() - 1; i <= casilla.getColumna() + 1; i++) {
+            for (int j = casilla.getFila() - 1; j <= casilla.getFila() + 1; j++) {
+                int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas, i, j);
+                if (hipotenochas == 0) {
+                    casilla.setText("");
+                    casilla.setBackgroundColor(Color.RED);
+                }
+                /*
+                try {
+                    if (casillas[i][j].getTieneHipotenocha() == 1) {
+                        despejar(casillas[i][j]);
+                    } else {
+                        casilla.setText("");
+                        casilla.setBackgroundColor(Color.RED);
+                        if (casillas[i][j] != casilla) {
+                            casillasDespejadas.add(casillas[i][j]);
+                        }
+                    }
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                }
+
+                 */
+            }
+        }
+        return casillasDespejadas;
     }
 
     public void despejar(Button boton, ArrayList<String> despejadas) {

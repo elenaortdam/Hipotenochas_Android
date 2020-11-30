@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/personaje"
-        android:layout_width="match_parent"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:text="x"
-        android:textSize="25dp"
-        android:gravity="center"
-        android:drawable="@drawable/android_oreo" />
+        android:text="TextView"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:id="@+id/ivImagen"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/oreo" />
 </LinearLayout>
