@@ -19,11 +19,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.iesribera.tarea2_elena_ortiz.nivel.Nivel;
 import com.iesribera.tarea2_elena_ortiz.nivel.NivelAvanzado;
 import com.iesribera.tarea2_elena_ortiz.nivel.NivelFacil;
 import com.iesribera.tarea2_elena_ortiz.nivel.NivelIntermedio;
+import com.iesribera.tarea2_elena_ortiz.personajes.Personaje;
+import com.iesribera.tarea2_elena_ortiz.personajes.PersonajeAdapter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,9 +51,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Personaje oreo = new Personaje("Oreo", getDrawable(R.mipmap.oreo));
-        Personaje ginger = new Personaje("Kitkat", getDrawable(R.mipmap.gingerbread));
+        Personaje oreo = new Personaje("Oreo", ContextCompat.getDrawable(this, R.drawable.android_oreo));
+        Personaje kitkat = new Personaje("Kitkat", ContextCompat.getDrawable(this, R.drawable.android_kitkat));
+        Personaje ginger = new Personaje("GingerBread", ContextCompat.getDrawable(this, R.drawable.android_gingerbread));
         personajes.add(oreo);
+        personajes.add(kitkat);
         personajes.add(ginger);
         nuevaPartida();
     }
@@ -83,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void elegirPersonaje() {
         final Dialog personaje = new Dialog(this);
-        personaje.setContentView(R.layout.personaje);
+        personaje.setContentView(R.layout.spinner_personaje);
         personaje.setTitle("Personajes");
 
         Spinner sp = personaje.findViewById(R.id.spinner_personaje);
@@ -128,9 +133,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void seleccionarNivel() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final CharSequence[] items = new CharSequence[3];
-        items[0] = Valores.NivelFacil.TEXTO;
-        items[1] = Valores.NivelMedio.TEXTO;
-        items[2] = Valores.NivelAvanzado.TEXTO;
+        items[0] = Constantes.NivelFacil.TEXTO;
+        items[1] = Constantes.NivelMedio.TEXTO;
+        items[2] = Constantes.NivelAvanzado.TEXTO;
         builder.setTitle(R.string.titulo_nivel)
                 .setSingleChoiceItems(items, dificultad, new DialogInterface.OnClickListener() {
                     @Override
@@ -150,13 +155,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Nivel crearNivel(int i) {
         switch (i) {
-            case Valores.NivelFacil.OPCION_MENU:
+            case Constantes.NivelFacil.OPCION_MENU:
                 nivel = new NivelFacil();
                 break;
-            case Valores.NivelMedio.OPCION_MENU:
+            case Constantes.NivelMedio.OPCION_MENU:
                 nivel = new NivelIntermedio();
                 break;
-            case Valores.NivelAvanzado.OPCION_MENU:
+            case Constantes.NivelAvanzado.OPCION_MENU:
                 nivel = new NivelAvanzado();
                 break;
         }
@@ -263,10 +268,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         casilla.setTextColor(Color.BLACK);
         if (casilla.getText().equals("0")) {
             descubrirCelda(casilla);
-//            String coordenada = (String) boton.getTag();
-//            descubiertas.add(coordenada);
-//            int[] posicion = obtenerPosicion(coordenada);
-
             int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas, casilla.getFila(), casilla.getColumna());
             if (hipotenochas == 0) {
                 List<Casilla> despejadas = new ArrayList<>();

@@ -1,26 +1,26 @@
 package com.iesribera.tarea2_elena_ortiz.nivel;
 
 
-import com.iesribera.tarea2_elena_ortiz.Valores;
+import com.iesribera.tarea2_elena_ortiz.Constantes;
 
 public class NivelIntermedio extends Nivel {
 	@Override
 	public String getNombre() {
-		return Valores.NivelMedio.NOMBRE;
-	}
+        return Constantes.NivelMedio.NOMBRE;
+    }
 
 	@Override
 	public int getFilas() {
-		return Valores.NivelMedio.FILAS;
-	}
+        return Constantes.NivelMedio.FILAS;
+    }
 
 	@Override
 	public int getColumnas() {
-		return Valores.NivelMedio.COLUMNAS;
-	}
+        return Constantes.NivelMedio.COLUMNAS;
+    }
 
 	@Override
 	public int getHipotenochasOcultas() {
-		return Valores.NivelMedio.HIPOTENOCHAS;
-	}
+        return Constantes.NivelMedio.HIPOTENOCHAS;
+    }
 }

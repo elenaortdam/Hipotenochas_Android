@@ -1,4 +1,4 @@
-package com.iesribera.tarea2_elena_ortiz;
+package com.iesribera.tarea2_elena_ortiz.personajes;
 
 import android.graphics.drawable.Drawable;
 

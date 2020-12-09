@@ -25,6 +25,6 @@
         android:id="@+id/selec_personaje"
         android:orderInCategory="4"
         android:title="@string/selecciona_incognita"
-        android:icon="@mipmap/oreo"
+        android:icon="@drawable/android_oreo"
         app:showAsAction="ifRoom"/>
 </menu>

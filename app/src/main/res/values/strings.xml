@@ -13,7 +13,8 @@
     <string name="configurar">Configurar el juego</string>
     <string name="titulo_nivel">Dificultad</string>
     <string name="selecciona_incognita">Seleccionar incognita</string>
-    <string name="personaje">Incognita</string>
+    <string name="personaje">Personaje</string>
+    <string name="ok">Seleccionar Personaje</string>
     <string name="volver">Volver</string>
     <string name="restantes">Incógnitas restantes: </string>
     <string name="victoria">¡Victoria!</string>

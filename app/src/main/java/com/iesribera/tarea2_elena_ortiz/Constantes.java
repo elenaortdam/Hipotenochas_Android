@@ -1,17 +1,17 @@
 package com.iesribera.tarea2_elena_ortiz;
 
-public final class Valores {
-	private Valores() {
-	}
+public final class Constantes {
+    private Constantes() {
+    }
 
-	public static final class NivelFacil {
-		public static final int OPCION_MENU = 0;
-		public static final String NOMBRE = "FACIL";
-		public static final String TEXTO = "Nivel Fácil";
-		public static final int HIPOTENOCHAS = 10;
-		public static final int COLUMNAS = 8;
-		public static final int FILAS = COLUMNAS;
-	}
+    public static final class NivelFacil {
+        public static final int OPCION_MENU = 0;
+        public static final String NOMBRE = "FACIL";
+        public static final String TEXTO = "Nivel Fácil";
+        public static final int HIPOTENOCHAS = 10;
+        public static final int COLUMNAS = 8;
+        public static final int FILAS = COLUMNAS;
+    }
 
 	public static final class NivelMedio {
 		public static final int OPCION_MENU = 1;

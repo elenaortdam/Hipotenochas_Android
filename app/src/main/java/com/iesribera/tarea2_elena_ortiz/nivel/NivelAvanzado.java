@@ -1,22 +1,22 @@
 package com.iesribera.tarea2_elena_ortiz.nivel;
 
 
-import com.iesribera.tarea2_elena_ortiz.Valores;
+import com.iesribera.tarea2_elena_ortiz.Constantes;
 
 public class NivelAvanzado extends Nivel {
 	@Override public String getNombre() {
-		return Valores.NivelAvanzado.NOMBRE;
+		return Constantes.NivelAvanzado.NOMBRE;
 	}
 
 	@Override public int getFilas() {
-		return Valores.NivelAvanzado.FILAS;
+		return Constantes.NivelAvanzado.FILAS;
 	}
 
 	@Override public int getColumnas() {
-		return Valores.NivelAvanzado.COLUMNAS;
+		return Constantes.NivelAvanzado.COLUMNAS;
 	}
 
 	@Override public int getHipotenochasOcultas() {
-		return Valores.NivelAvanzado.HIPOTENOCHAS;
+		return Constantes.NivelAvanzado.HIPOTENOCHAS;
 	}
 }
