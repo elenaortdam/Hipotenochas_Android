@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Menu;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,21 +29,17 @@ import com.iesribera.tarea2_elena_ortiz.personajes.Personaje;
 import com.iesribera.tarea2_elena_ortiz.personajes.PersonajeAdapter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final ArrayList<Personaje> personajes = new ArrayList<>();
-    private Drawable imagenPersonaje;
-    private final Set<String> descubiertas = new HashSet<>();
+    private Personaje personajeSeleccionado;
     private GridLayout grid;
     private Tablero tablero;
     private Nivel nivel = new NivelFacil();
     private Casilla[][] casillas;
     private final int dificultad = 0;
-    int personaje = 0;
     private int width;
     private int height;
 
@@ -57,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         personajes.add(oreo);
         personajes.add(kitkat);
         personajes.add(ginger);
+        personajeSeleccionado = oreo;
         nuevaPartida();
     }
 
@@ -87,47 +84,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void elegirPersonaje() {
-        final Dialog personaje = new Dialog(this);
+        Dialog personaje = new Dialog(this);
         personaje.setContentView(R.layout.spinner_personaje);
         personaje.setTitle("Personajes");
 
-        Spinner sp = personaje.findViewById(R.id.spinner_personaje);
-        PersonajeAdapter pa = new PersonajeAdapter(this, personajes);
-        sp.setAdapter(pa);
-        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        Spinner spinner = personaje.findViewById(R.id.spinner_personaje);
+        PersonajeAdapter personajeAdapter = new PersonajeAdapter(this, personajes);
+        spinner.setAdapter(personajeAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Personaje seleccionado = (Personaje) adapterView.getAdapter().getItem(i);
-                setImagenPersonaje(seleccionado.getImagen());
+                personajeSeleccionado = personajes.get(i);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        //todo: ver
-//        Button ok = personaje.findViewById(R.id.btnPersonajeOk);
-        /*
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 personaje.dismiss();
             }
         });
-
-         */
-
         personaje.show();
-    }
-
-    public Drawable getImagenPersonaje() {
-        return imagenPersonaje;
-    }
-
-    public void setImagenPersonaje(Drawable imagenPersonaje) {
-        this.imagenPersonaje = imagenPersonaje;
     }
 
     public void seleccionarNivel() {
@@ -170,35 +145,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return nivel;
     }
-/*
-    public void mostrarPersonajes() {
-        Personaje selecPersonaje = new Personaje();
-        selecPersonaje.show(getFragmentManager(), null);
-    }
-
-    public void setPersonaje(int i) {
-        personaje = i;
-        for (Button boton : personajes) {
-            seleccionarPersonaje(boton);
-        }
-    }
-
- */
-
-    public void seleccionarPersonaje(Button boton) {
-        switch (personaje) {
-            case 0:
-                boton.setBackgroundResource(R.drawable.android_oreo);
-                break;
-            case 1:
-                boton.setBackgroundResource(R.drawable.android_kitkat);
-                break;
-            case 2:
-                boton.setBackgroundResource(R.drawable.android_gingerbread);
-                break;
-        }
-        boton.setText("");
-    }
 
     public void nuevaPartida() {
         tablero = new Tablero(nivel);
@@ -211,42 +157,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         grid.setColumnCount(nivel.getColumnas());
         grid.setRowCount(nivel.getFilas());
         casillas = new Casilla[nivel.getColumnas()][nivel.getFilas()];
-        toma();
-        Button boton;
-        int numeroCasilla = 0;
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        GridLayout.LayoutParams param = new GridLayout.LayoutParams();
+        param.setMargins(0, 0, 0, 10);
+        param.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        param.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        float escala = getResources().getDisplayMetrics().density;
+        float dpPx = (int) (50 * escala + 0.6f);
+        height -= dpPx;
+        LinearLayout.LayoutParams layoutParams = new
+                LinearLayout.LayoutParams(width / nivel.getColumnas(), height / nivel.getFilas());
+        layoutParams.setMargins(0, 0, 0, 0);
         for (int i = 0; i < nivel.getColumnas(); i++) {
             for (int j = 0; j < nivel.getFilas(); j++) {
                 casillas[i][j] = new Casilla(this, i, j, (byte) tablero.getCasillas()[i][j]);
-                casillas[i][j].setLayoutParams(new ViewGroup.LayoutParams(width / nivel.getColumnas(),
-                        ((height) / nivel.getFilas())));
-//                boton = new Button(this);
-//                boton.setLayoutParams(new ViewGroup.LayoutParams(width / nivel.getColumnas(),
-//                        ((height) / nivel.getFilas())));
+//                casillas[i][j].setLayoutParams(new ViewGroup.LayoutParams(this.width / nivel.getColumnas(),
+//                        ((this.height) / nivel.getFilas())));
+                casillas[i][j].setLayoutParams(layoutParams);
                 casillas[i][j].setText(String.valueOf(tablero.getCasillas()[i][j]));
                 casillas[i][j].setPadding(0, 0, 0, 0);
                 casillas[i][j].setBackgroundResource(R.drawable.my_button_bg);
                 casillas[i][j].setTextColor(Color.BLACK);
-                casillas[i][j].setTag(i + "," + j);
-//                boton.setTag(i + "," + j);
-//                boton.setTag(1, i + "," + j);
                 casillas[i][j].setOnClickListener(this);
 //                boton.setOnLongClickListener(this);
                 grid.addView(casillas[i][j]);
             }
         }
         return casillas;
-    }
-
-    //TODO: modificar
-    public void toma() {
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        width = size.x;
-        height = size.y;
-        float escala = getResources().getDisplayMetrics().density;
-        float dpPx = (int) (80 * escala + 0.5f);
-        height -= dpPx;
     }
 
     public void mostrarInstrucciones() {
@@ -281,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
 //            inabilitar();
             casilla.setText("");
-            casilla.setBackgroundResource(R.mipmap.oreo_foreground);
+            casilla.setBackground(personajeSeleccionado.getImagen());
             Toast.makeText(MainActivity.this,
                     R.string.derrota, Toast.LENGTH_LONG).show();
         }

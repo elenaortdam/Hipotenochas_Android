@@ -1,10 +1,7 @@
 package com.iesribera.tarea2_elena_ortiz.nivel;
 
 
-
 import com.iesribera.tarea2_elena_ortiz.Casilla;
-
-import java.util.Random;
 
 public abstract class Nivel {
 
@@ -33,7 +30,7 @@ public abstract class Nivel {
 				}
 			}
 		}
-		casillas[celdaX][celdaY].setHipotenochasAlrededor(totalHipotenochas);
+//		casillas[celdaX][celdaY].setHipotenochasAlrededor(totalHipotenochas);
 		return totalHipotenochas;
 	}
 
