@@ -14,6 +14,34 @@ public class Tablero {
 
     public Tablero(Nivel nivel) {
         casillas = crearTablero(nivel).getCasillas();
+        /*
+        for (int i = 0; i < casillas.length; i++) {
+            for (int j = 0; j < casillas[i].length; j++) {
+                casillas[i][j] = 0;
+            }
+        }
+
+         */
+        /*
+        casillas[0][0] = 1;
+        casillas[0][1] = 1;
+        casillas[0][2] = 1;
+        casillas[0][3] = 1;
+        casillas[0][7] = 1;
+        casillas[1][0] = 1;
+        casillas[1][1] = 1;
+        casillas[1][2] = 1;
+        casillas[1][3] = 1;
+        casillas[1][7] = 1;
+
+         */
+/*
+        casillas[1][0] = 1;
+        casillas[1][1] = 1;
+        casillas[1][2] = 1;
+*/
+
+
     }
 
     public int[][] getCasillas() {

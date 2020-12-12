@@ -12,6 +12,26 @@ public class Casilla extends Button {
 	private byte tieneHipotenocha;
 	private int hipotenochasAlrededor;
 
+	public boolean isComprobarHipotenochas() {
+		return comprobarHipotenochas;
+	}
+
+	public void setComprobarHipotenochas(boolean comprobarHipotenochas) {
+		this.comprobarHipotenochas = comprobarHipotenochas;
+	}
+
+	private boolean comprobarHipotenochas;
+
+	public boolean isPulsada() {
+		return pulsada;
+	}
+
+	public void setPulsada(boolean pulsada) {
+		this.pulsada = pulsada;
+	}
+
+	private boolean pulsada = false;
+
 
 	public Casilla(Context context, int columna, int fila, byte tieneHipotenocha) {
 		super(context);
