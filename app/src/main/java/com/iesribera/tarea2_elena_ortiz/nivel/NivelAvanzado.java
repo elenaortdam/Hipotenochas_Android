@@ -6,15 +6,18 @@ import com.iesribera.tarea2_elena_ortiz.Constantes;
 public class NivelAvanzado extends Nivel {
 
 
-	@Override public int getFilas() {
-		return Constantes.NivelAvanzado.FILAS;
-	}
+    @Override
+    public int getFilas() {
+        return Constantes.NivelAvanzado.FILAS;
+    }
 
-	@Override public int getColumnas() {
-		return Constantes.NivelAvanzado.COLUMNAS;
-	}
+    @Override
+    public int getColumnas() {
+        return Constantes.NivelAvanzado.COLUMNAS;
+    }
 
-	@Override public int getHipotenochasOcultas() {
-		return Constantes.NivelAvanzado.HIPOTENOCHAS;
-	}
+    @Override
+    public int getHipotenochasOcultas() {
+        return Constantes.NivelAvanzado.HIPOTENOCHAS;
+    }
 }

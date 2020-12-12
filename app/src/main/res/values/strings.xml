@@ -9,6 +9,9 @@
         ¿Cuándo gano? Cuando marques todas las minas del nivel y no caigas en ninguna de ellas ;)
         Parece fácil ¿verdad? Por qué no lo intentas…
        </string>
+    <string name="nivel_facil">Nivel Fácil</string>
+    <string name="nivel_medio">Nivel Medio</string>
+    <string name="nivel_avanzado">Nivel Avanzado</string>
     <string name="nuevo_juego">Nuevo juego</string>
     <string name="configurar">Configurar el juego</string>
     <string name="titulo_nivel">Dificultad</string>

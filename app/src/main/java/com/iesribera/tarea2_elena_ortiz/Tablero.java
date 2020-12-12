@@ -7,13 +7,6 @@ import java.util.Random;
 public class Tablero {
 
     private final int[][] casillas;
-//    private final Casilla[][] casillas;
-/*
-    public Tablero(Casilla[][] casillas) {
-        this.casillas = casillas;
-    }
-
- */
 
     public Tablero(int[][] casillas) {
         this.casillas = casillas;
@@ -74,6 +67,18 @@ public class Tablero {
     private int getRandomNumber(int min, int max) {
         Random random = new Random();
         return random.nextInt(max - min) + min;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int[] casilla : casillas) {
+            for (int value : casilla) {
+                stringBuilder.append(value).append(" ");
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 
 }

@@ -31,7 +31,7 @@ import com.iesribera.tarea2_elena_ortiz.personajes.PersonajeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
 
     private final ArrayList<Personaje> personajes = new ArrayList<>();
     private Personaje personajeSeleccionado;
@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Nivel nivel = new NivelFacil();
     private Casilla[][] casillas;
     private final int dificultad = 0;
-    private int width;
-    private int height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +106,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void seleccionarNivel() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final CharSequence[] items = new CharSequence[3];
-        items[0] = Constantes.NivelFacil.TEXTO;
-        items[1] = Constantes.NivelMedio.TEXTO;
-        items[2] = Constantes.NivelAvanzado.TEXTO;
+        items[0] = getString(R.string.nivel_facil);
+        items[1] = getString(R.string.nivel_medio);
+        items[2] = getString(R.string.nivel_avanzado);
         builder.setTitle(R.string.titulo_nivel)
                 .setSingleChoiceItems(items, dificultad, new DialogInterface.OnClickListener() {
                     @Override
@@ -175,16 +173,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layoutParams.setMargins(0, 0, 0, 0);
         for (int i = 0; i < nivel.getColumnas(); i++) {
             for (int j = 0; j < nivel.getFilas(); j++) {
-                casillas[i][j] = new Casilla(this, i, j, (byte) tablero.getCasillas()[i][j]);
-//                casillas[i][j].setLayoutParams(new ViewGroup.LayoutParams(this.width / nivel.getColumnas(),
-//                        ((this.height) / nivel.getFilas())));
+                casillas[i][j] = new Casilla(this, j, i, (byte) tablero.getCasillas()[i][j]);
                 casillas[i][j].setLayoutParams(layoutParams);
                 casillas[i][j].setText(String.valueOf(tablero.getCasillas()[i][j]));
                 casillas[i][j].setPadding(0, 0, 0, 0);
                 casillas[i][j].setBackgroundResource(R.drawable.my_button_bg);
                 casillas[i][j].setTextColor(Color.BLACK);
                 casillas[i][j].setOnClickListener(this);
-//                boton.setOnLongClickListener(this);
+                casillas[i][j].setOnLongClickListener(this);
                 grid.addView(casillas[i][j]);
             }
         }
@@ -238,52 +234,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     casilla.setText("");
                     casilla.setBackgroundColor(Color.RED);
                 }
-                /*
-                try {
-                    if (casillas[i][j].getTieneHipotenocha() == 1) {
-                        despejar(casillas[i][j]);
-                    } else {
-                        casilla.setText("");
-                        casilla.setBackgroundColor(Color.RED);
-                        if (casillas[i][j] != casilla) {
-                            casillasDespejadas.add(casillas[i][j]);
-                        }
-                    }
-                } catch (ArrayIndexOutOfBoundsException ignored) {
-                }
 
-                 */
             }
         }
         return casillasDespejadas;
     }
 
-    public void despejar(Button boton, ArrayList<String> despejadas) {
-        for (String coordenada : despejadas) {
-            if (coordenada.equals(boton.getTag())) return;
-        }
-        despejadas.add((String) boton.getTag());
-        boton.setEnabled(false);
-        int[] posicion = obtenerPosicion((String) boton.getTag());
-        for (int i = 0; i < grid.getChildCount(); i++) {
-            Button botonHijo = (Button) grid.getChildAt(i);
-            int[] posicionHijo = obtenerPosicion((String) grid.getChildAt(i).getTag());
-            int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas, posicionHijo[0], posicionHijo[1]);
-            if (hipotenochas == 0) {
-                if (posicion[0] == posicionHijo[0] & (posicion[1] == (1 + posicionHijo[1])
-                        || posicion[1] == (posicionHijo[1] - 1))) {
-                    botonHijo.setBackgroundColor(Color.RED);
-                    botonHijo.setText("");
-                    despejar(botonHijo, despejadas);
-                }
-                if (posicion[1] == posicionHijo[1] & (posicion[0] == (1 + posicionHijo[0]) || posicion[0] == (posicionHijo[0] - 1))) {
-                    botonHijo.setBackgroundColor(Color.RED);
-                    botonHijo.setText("");
-                    despejar(botonHijo, despejadas);
-                }
-            }
-        }
-    }
 
     int[] obtenerPosicion(String coordenada) {
         int[] posicion = new int[2];
@@ -297,5 +253,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void descubrirCelda(Button boton) {
         boton.setBackgroundColor(Color.WHITE);
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
     }
 }

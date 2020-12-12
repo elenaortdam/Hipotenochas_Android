@@ -20,10 +20,6 @@ public class Casilla extends Button {
 		this.tieneHipotenocha = tieneHipotenocha;
 	}
 
-//	public Casilla(byte tieneHipotenocha) {
-//		this.tieneHipotenocha = tieneHipotenocha;
-//	}
-
 	public byte getTieneHipotenocha() {
 		return tieneHipotenocha;
 	}
@@ -56,5 +52,13 @@ public class Casilla extends Button {
 		this.columna = columna;
 	}
 
+	@Override
+	public String toString() {
+		int mina = 0;
+		if (tieneHipotenocha == 1) {
+			mina = 1;
+		}
+		return mina == 0 ? "[ ]" : "[" + mina + "]";
+	}
 
 }
