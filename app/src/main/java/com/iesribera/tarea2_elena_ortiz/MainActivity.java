@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -40,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Nivel nivel = new NivelFacil();
     private Casilla[][] casillas;
     private final int dificultad = 0;
+    private int hipotenochasRestantes = nivel.getHipotenochasOcultas();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (nivel == null) {
             throw new IllegalArgumentException("Ha ocurrido un error al detectar el nivel");
         }
+        hipotenochasRestantes = nivel.getHipotenochasOcultas();
         return nivel;
     }
 
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         casilla.setEnabled(false);
         casilla.setTextColor(Color.BLACK);
         if (casilla.getText().equals("0")) {
-            descubrirCelda(casilla);
+            casilla.setBackgroundColor(Color.WHITE);
             int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas, casilla.getFila(), casilla.getColumna());
             if (hipotenochas == 0) {
                 List<Casilla> despejadas = new ArrayList<>();
@@ -217,11 +218,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 casilla.setText(String.valueOf(hipotenochas));
             }
         } else {
-//            inabilitar();
             casilla.setText("");
             casilla.setBackground(personajeSeleccionado.getImagen());
             Toast.makeText(MainActivity.this,
                     R.string.derrota, Toast.LENGTH_LONG).show();
+            terminarJuego();
+
         }
     }
 
@@ -240,23 +242,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return casillasDespejadas;
     }
 
-
-    int[] obtenerPosicion(String coordenada) {
-        int[] posicion = new int[2];
-        String coma = ",";
-        String[] coordenadas = coordenada.split(coma);
-        for (int i = 0; i < coordenadas.length; i++) {
-            posicion[i] = Integer.parseInt(coordenadas[i]);
+    private void terminarJuego() {
+        for (int i = 0; i < casillas.length; i++) {
+            for (int j = 0; j < casillas[i].length; j++) {
+                casillas[i][j].setEnabled(false);
+            }
         }
-        return posicion;
-    }
-
-    public void descubrirCelda(Button boton) {
-        boton.setBackgroundColor(Color.WHITE);
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        return false;
+    public boolean onLongClick(View view) {
+        Casilla pulsada = (Casilla) view;
+
+        int valor = casillas[pulsada.getFila()][pulsada.getColumna()].getTieneHipotenocha();
+
+        if (valor == 1) {
+            pulsada.setBackground(personajeSeleccionado.getImagen());
+            pulsada.setClickable(false);
+            hipotenochasRestantes--;
+
+            if (hipotenochasRestantes == 0) {
+                Toast.makeText(this, getString(R.string.victoria), Toast.LENGTH_LONG).show();
+                terminarJuego();
+            } else {
+                Toast.makeText(this, String.format(getString(R.string.hipotenochas_restantes), hipotenochasRestantes),
+                        Toast.LENGTH_LONG).show();
+            }
+        } else {
+            pulsada.setBackgroundColor(Color.WHITE);
+            pulsada.setText(String.valueOf(pulsada.getHipotenochasAlrededor()));
+            pulsada.setClickable(false);
+            Toast.makeText(this, getString(R.string.derrota_long_click), Toast.LENGTH_LONG).show();
+            terminarJuego();
+        }
+
+        return true;
     }
 }

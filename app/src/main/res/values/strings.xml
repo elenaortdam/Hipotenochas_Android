@@ -21,7 +21,9 @@
     <string name="volver">Volver</string>
     <string name="restantes">Incógnitas restantes: </string>
     <string name="victoria">¡Victoria!</string>
+    <string name="hipotenochas_restantes">¡Genial! Has encontrado una hipotenochas. Te quedan %d</string>
     <string name="derrota">Vaya...Has perdido...</string>
+    <string name="derrota_long_click">¡Has perdido! ahí no había hipotenocha...</string>
     <string-array name="personaje">
         <item>Oreo</item>
         <item>Kitkat</item>
