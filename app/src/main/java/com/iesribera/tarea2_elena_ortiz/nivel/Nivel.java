@@ -5,12 +5,10 @@ import com.iesribera.tarea2_elena_ortiz.Casilla;
 
 public abstract class Nivel {
 
-	private String nombre;
 	private int filas;
 	private int columnas;
 	private int hipotenochasOcultas;
 
-	abstract public String getNombre();
 
 	abstract public int getFilas();
 
@@ -30,12 +28,7 @@ public abstract class Nivel {
 				}
 			}
 		}
-//		casillas[celdaX][celdaY].setHipotenochasAlrededor(totalHipotenochas);
 		return totalHipotenochas;
 	}
 
-	//TODO: elena
-	private void descubrirMinas() {
-
-	}
 }

@@ -56,13 +56,5 @@ public class Casilla extends Button {
 		this.columna = columna;
 	}
 
-	@Override
-	public String toString() {
-		int mina = 0;
-		if (getTieneHipotenocha() == 1) {
-			mina = 1;
-		}
-		return "[" + mina + "]";
-	}
 
 }

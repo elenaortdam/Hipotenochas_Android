@@ -75,17 +75,5 @@ public class Tablero {
         Random random = new Random();
         return random.nextInt(max - min) + min;
     }
-/*
-	@Override public String toString() {
-		StringBuilder stringBuilder = new StringBuilder();
-		for (Casilla[] casilla : casillas) {
-			for (Casilla value : casilla) {
-				stringBuilder.append(value).append(" ");
-			}
-			stringBuilder.append("\n");
-		}
-		return stringBuilder.toString();
-	}
 
- */
 }

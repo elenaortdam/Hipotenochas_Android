@@ -2,11 +2,9 @@ package com.iesribera.tarea2_elena_ortiz.nivel;
 
 //TODO: poner en constantes
 public class NivelFacil extends Nivel{
-	@Override public String getNombre() {
-		return "Facil";
-	}
 
-	@Override public int getFilas() {
+
+    @Override public int getFilas() {
 		return 8;
 	}
 
