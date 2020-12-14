@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Nivel nivel = new NivelFacil();
     private Casilla[][] casillas;
     private final int dificultad = 0;
-    private int hipotenochasRestantes = nivel.getHipotenochasOcultas();
+    private int hipotenochasRestantes;
     private final List<Casilla> despejadas = new ArrayList<>();
 
 
@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void nuevaPartida() {
         tablero = new Tablero(nivel);
         casillas = crearPartida(nivel);
+        this.hipotenochasRestantes = nivel.getHipotenochasOcultas();
     }
 
     public Casilla[][] crearPartida(Nivel nivel) {
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             casilla.setBackgroundColor(Color.RED);
             despejar(casilla, despejadas);
         } else {
-            casilla.setText(String.valueOf(casilla.getHipotenochasAlrededor()));
+            casilla.setText(String.valueOf(casilla.getText()));
         }
         casilla.setEnabled(false);
         casilla.setPulsada(true);
@@ -245,8 +246,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             casillaActual.setText("");
                             casillaActual.setBackgroundColor(Color.RED);
                             casillaActual.setEnabled(false);
-                            casillaActual.setPulsada(true);
                             casillaActual.setClickable(false);
+                            casillaActual.setPulsada(true);
                             despejar(casillaActual, despejadas);
                         } else if (casillaActual.getText() != "" && Integer.parseInt(String.valueOf(casillaActual.getText()))
                                 > Constantes.SIN_HIPOTENOCHAS_ALREDEDOR) {
@@ -279,10 +280,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Casilla pulsada = (Casilla) view;
 
         int valor = casillas[pulsada.getFila()][pulsada.getColumna()].getTieneHipotenocha();
-
-        if (valor == 1) {
+        pulsada.setClickable(false);
+        pulsada.setPulsada(true);
+        pulsada.setEnabled(false);
+        if (valor == Constantes.TIENE_HIPOTENOCHA) {
+            pulsada.setText("");
             pulsada.setBackground(personajeSeleccionado.getImagen());
-            pulsada.setClickable(false);
             hipotenochasRestantes--;
 
             if (hipotenochasRestantes == 0) {
@@ -294,8 +297,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else {
             pulsada.setBackgroundColor(Color.WHITE);
-            pulsada.setText(String.valueOf(pulsada.getHipotenochasAlrededor()));
-            pulsada.setClickable(false);
+            pulsada.setText(String.valueOf(pulsada.getText()));
             Toast.makeText(this, getString(R.string.derrota_long_click), Toast.LENGTH_LONG).show();
             terminarJuego();
         }
