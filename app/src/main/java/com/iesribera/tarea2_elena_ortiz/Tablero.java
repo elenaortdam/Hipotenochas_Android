@@ -14,6 +14,16 @@ public class Tablero {
 
     public Tablero(Nivel nivel) {
         casillas = crearTablero(nivel).getCasillas();
+        for (int i = 0; i < casillas.length; i++) {
+            for (int j = 0; j < casillas[i].length; j++) {
+
+                int valor = casillas[i][j];
+                if (valor != Constantes.TIENE_HIPOTENOCHA) {
+                    casillas[i][j] = contarHipotenochasAlrededor(casillas, i, j);
+                }
+            }
+        }
+        int vari = 0;
         /*
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas[i].length; j++) {
@@ -44,6 +54,21 @@ public class Tablero {
 
     }
 
+    public static int contarHipotenochasAlrededor(int[][] casillas, int celdaX, int celdaY) {
+        int totalHipotenochas = 0;
+        for (int i = celdaX - 1; i <= celdaX + 1; i++) {
+            for (int j = celdaY - 1; j <= celdaY + 1; j++) {
+                try {
+                    if (casillas[i][j] == Constantes.TIENE_HIPOTENOCHA) {
+                        totalHipotenochas++;
+                    }
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                }
+            }
+        }
+        return totalHipotenochas;
+    }
+
     public int[][] getCasillas() {
         return casillas;
     }
@@ -60,7 +85,7 @@ public class Tablero {
                 if (hipotenochasTotales < nivel.getHipotenochasOcultas()
                         && hipotenochasCreadas < maxHipotenochasFila
                         && j == numeroRandom) {
-                    casillas[i][j] = 1;
+                    casillas[i][j] = Constantes.TIENE_HIPOTENOCHA;
                     hipotenochasTotales++;
                     hipotenochasCreadas++;
                 } else {
@@ -82,7 +107,7 @@ public class Tablero {
 
     private void asignarHipotenochas(int[][] casillas, int i, int j) {
         if (casillas[i][j] == 0) {
-            casillas[i][j] = 1;
+            casillas[i][j] = Constantes.TIENE_HIPOTENOCHA;
         } else {
             try {
                 asignarHipotenochas(casillas, i, j + 1);

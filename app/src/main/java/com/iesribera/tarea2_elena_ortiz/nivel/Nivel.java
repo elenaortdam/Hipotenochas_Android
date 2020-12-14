@@ -2,6 +2,7 @@ package com.iesribera.tarea2_elena_ortiz.nivel;
 
 
 import com.iesribera.tarea2_elena_ortiz.Casilla;
+import com.iesribera.tarea2_elena_ortiz.Constantes;
 
 public abstract class Nivel {
 
@@ -21,7 +22,7 @@ public abstract class Nivel {
 		for (int i = celdaX - 1; i <= celdaX + 1; i++) {
 			for (int j = celdaY - 1; j <= celdaY + 1; j++) {
 				try {
-					if (casillas[i][j].getTieneHipotenocha() == 1) {
+					if (casillas[i][j].getTieneHipotenocha() == Constantes.TIENE_HIPOTENOCHA) {
 						totalHipotenochas++;
 					}
 				} catch (ArrayIndexOutOfBoundsException ignored) {

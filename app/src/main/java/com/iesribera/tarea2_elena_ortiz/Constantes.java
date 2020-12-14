@@ -1,15 +1,18 @@
 package com.iesribera.tarea2_elena_ortiz;
 
 public final class Constantes {
-    private Constantes() {
-    }
+	private Constantes() {
+	}
 
-    public static final class NivelFacil {
-        public static final int OPCION_MENU = 0;
-        public static final int HIPOTENOCHAS = 10;
-        public static final int COLUMNAS = 8;
-        public static final int FILAS = COLUMNAS;
-    }
+	public static final int TIENE_HIPOTENOCHA = -1;
+	public static final int SIN_HIPOTENOCHAS_ALREDEDOR = 0;
+
+	public static final class NivelFacil {
+		public static final int OPCION_MENU = 0;
+		public static final int HIPOTENOCHAS = 10;
+		public static final int COLUMNAS = 8;
+		public static final int FILAS = COLUMNAS;
+	}
 
 	public static final class NivelMedio {
 		public static final int OPCION_MENU = 1;
@@ -24,4 +27,6 @@ public final class Constantes {
 		public static final int COLUMNAS = 16;
 		public static final int FILAS = COLUMNAS;
 	}
+
+
 }

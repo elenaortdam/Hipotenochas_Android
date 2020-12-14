@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Casilla[][] casillas;
     private final int dificultad = 0;
     private int hipotenochasRestantes = nivel.getHipotenochasOcultas();
+    private final List<Casilla> despejadas = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void nuevaPartida() {
         tablero = new Tablero(nivel);
         casillas = crearPartida(nivel);
-        System.out.println("\n" + tablero);
     }
 
     public Casilla[][] crearPartida(Nivel nivel) {
@@ -176,14 +177,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < nivel.getColumnas(); i++) {
             for (int j = 0; j < nivel.getFilas(); j++) {
                 casillas[i][j] = new Casilla(this, j, i, (byte) tablero.getCasillas()[i][j]);
-                casillas[i][j].setLayoutParams(layoutParams);
-                casillas[i][j].setText(String.valueOf(tablero.getCasillas()[i][j]));
-                casillas[i][j].setPadding(0, 0, 0, 0);
-                casillas[i][j].setBackgroundResource(R.drawable.my_button_bg);
-                casillas[i][j].setTextColor(Color.BLACK);
-                casillas[i][j].setOnClickListener(this);
-                casillas[i][j].setOnLongClickListener(this);
-                grid.addView(casillas[i][j]);
+                Casilla casilla = casillas[i][j];
+                casilla.setLayoutParams(layoutParams);
+                casilla.setPulsada(false);
+                casilla.setText(String.valueOf(tablero.getCasillas()[i][j]));
+                casilla.setPadding(0, 0, 0, 0);
+                //TODO: elena descomentar
+                //   casillas[i][j].setBackgroundResource(R.drawable.my_button_bg);
+                casilla.setTextColor(Color.BLACK);
+                casilla.setTag(i + ";" + j);
+
+                casilla.setOnClickListener(this);
+                casilla.setOnLongClickListener(this);
+                grid.addView(casilla);
             }
         }
 
@@ -205,64 +211,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View view) {
         Casilla casilla = (Casilla) view;
-        casilla.setEnabled(false);
         casilla.setTextColor(Color.BLACK);
-        casilla.setPulsada(true);
-        if (casilla.getText().equals("0")) {
-            casilla.setBackgroundColor(Color.WHITE);
-            int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas, casilla.getFila(), casilla.getColumna());
-            if (hipotenochas == 0) {
-                casilla.setText("");
-                casilla.setBackgroundColor(Color.RED);
-                casilla.setPulsada(true);
-                despejar(casilla, new ArrayList<>());
-
-            } else {
-                casilla.setText(String.valueOf(hipotenochas));
-                casilla.setEnabled(false);
-                casilla.setPulsada(true);
-            }
-        } else {
+        if (casilla.getText().equals(String.valueOf(Constantes.TIENE_HIPOTENOCHA))) {
             casilla.setText("");
-            casilla.setPulsada(true);
-            casilla.setEnabled(false);
             casilla.setBackground(personajeSeleccionado.getImagen());
-            Toast.makeText(MainActivity.this,
-                    R.string.derrota, Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, R.string.derrota, Toast.LENGTH_LONG).show();
             terminarJuego();
-
+        } else if (casilla.getText().equals(String.valueOf(Constantes.SIN_HIPOTENOCHAS_ALREDEDOR))) {
+            casilla.setText("");
+            casilla.setBackgroundColor(Color.RED);
+            despejar(casilla, despejadas);
+        } else {
+            casilla.setText(String.valueOf(casilla.getHipotenochasAlrededor()));
         }
+        casilla.setEnabled(false);
+        casilla.setPulsada(true);
     }
 
-    public void despejar(Casilla casilla, List<Casilla> casillasDespejadas) {
-//        for (Casilla despejada : casillasDespejadas) {
-//            if (despejada.getColumna() == casilla.getColumna() && despejada.getFila() == casilla.getFila()) {
-//                return;
-//            }
-//        }
-
+    public void despejar(Casilla casilla, List<Casilla> despejadas) {
+        for (Casilla despejada : despejadas) {
+            if (despejada.getTag().equals(casilla.getTag())) {
+                return;
+            }
+        }
         for (int i = casilla.getFila() - 1; i <= casilla.getFila() + 1; i++) {
             for (int j = casilla.getColumna() - 1; j <= casilla.getColumna() + 1; j++) {
                 try {
                     Casilla casillaActual = casillas[i][j];
-
-                    int hipotenochas = Nivel.contarHipotenochasAlrededor(casillas,
-                            casillaActual.getFila(), casillaActual.getColumna());
                     if (!casillaActual.isPulsada()) {
-                        if (hipotenochas == 0) {
+                        //  despejadas.add(casillaActual);
+                        casillaActual.setTextColor(Color.BLACK);
+                        if (casillaActual.getText().equals(String.valueOf(Constantes.SIN_HIPOTENOCHAS_ALREDEDOR))) {
                             casillaActual.setText("");
                             casillaActual.setBackgroundColor(Color.RED);
+                            casillaActual.setEnabled(false);
                             casillaActual.setPulsada(true);
-                            casillaActual.setComprobarHipotenochas(false);
-                            casillasDespejadas.add(casillaActual);
-                            if (casillaActual.getColumna() != casilla.getColumna()
-                                    && casillaActual.getFila() != casilla.getFila()) {
-                                despejar(casillaActual, casillasDespejadas);
-                            }
-                        } else {
-                            casillaActual.setBackgroundColor(Color.WHITE);
-                            casillaActual.setText(String.valueOf(hipotenochas));
+                            casillaActual.setClickable(false);
+                            despejar(casillaActual, despejadas);
+                        } else if (casillaActual.getText() != "" && Integer.parseInt(String.valueOf(casillaActual.getText()))
+                                > Constantes.SIN_HIPOTENOCHAS_ALREDEDOR) {
+                            casillaActual.setEnabled(false);
+                            casillaActual.setPulsada(true);
+                            casillaActual.setClickable(false);
+                            casillaActual.setText(casillaActual.getText());
                         }
+
                     }
 
                 } catch (ArrayIndexOutOfBoundsException ignored) {
