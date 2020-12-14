@@ -4,7 +4,6 @@ import com.iesribera.tarea2_elena_ortiz.Constantes;
 
 public class NivelFacil extends Nivel {
 
-
     @Override
     public int getFilas() {
         return Constantes.NivelFacil.FILAS;

@@ -5,7 +5,6 @@ import com.iesribera.tarea2_elena_ortiz.Constantes;
 
 public class NivelIntermedio extends Nivel {
 
-
     @Override
 	public int getFilas() {
         return Constantes.NivelMedio.FILAS;

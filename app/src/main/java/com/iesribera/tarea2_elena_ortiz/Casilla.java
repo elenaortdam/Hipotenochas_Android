@@ -7,20 +7,10 @@ import android.widget.Button;
 @SuppressLint("AppCompatCustomView")
 public class Casilla extends Button {
 
-	private int fila;
-	private int columna;
-	private byte tieneHipotenocha;
-	private int hipotenochasAlrededor;
+	private final int fila;
+	private final int columna;
+	private final byte tieneHipotenocha;
 
-	public boolean isComprobarHipotenochas() {
-		return comprobarHipotenochas;
-	}
-
-	public void setComprobarHipotenochas(boolean comprobarHipotenochas) {
-		this.comprobarHipotenochas = comprobarHipotenochas;
-	}
-
-	private boolean comprobarHipotenochas;
 
 	public boolean isPulsada() {
 		return pulsada;
@@ -44,41 +34,12 @@ public class Casilla extends Button {
 		return tieneHipotenocha;
 	}
 
-	public void setHipotenocha(byte tieneHipotenocha) {
-		this.tieneHipotenocha = tieneHipotenocha;
-	}
-
-	public int getHipotenochasAlrededor() {
-		return hipotenochasAlrededor;
-	}
-
-	public void setHipotenochasAlrededor(int minasAlrededor) {
-		this.hipotenochasAlrededor = minasAlrededor;
-	}
-
 	public int getFila() {
 		return fila;
 	}
 
 	public int getColumna() {
 		return columna;
-	}
-
-	public void setFila(int fila) {
-		this.fila = fila;
-	}
-
-	public void setColumna(int columna) {
-		this.columna = columna;
-	}
-
-	@Override
-	public String toString() {
-		int mina = 0;
-		if (tieneHipotenocha == 1) {
-			mina = 1;
-		}
-		return mina == 0 ? "[ ]" : "[" + mina + "]";
 	}
 
 }

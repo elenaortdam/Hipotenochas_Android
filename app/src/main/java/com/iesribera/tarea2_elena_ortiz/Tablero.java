@@ -23,35 +23,6 @@ public class Tablero {
                 }
             }
         }
-        int vari = 0;
-        /*
-        for (int i = 0; i < casillas.length; i++) {
-            for (int j = 0; j < casillas[i].length; j++) {
-                casillas[i][j] = 0;
-            }
-        }
-
-         */
-        /*
-        casillas[0][0] = 1;
-        casillas[0][1] = 1;
-        casillas[0][2] = 1;
-        casillas[0][3] = 1;
-        casillas[0][7] = 1;
-        casillas[1][0] = 1;
-        casillas[1][1] = 1;
-        casillas[1][2] = 1;
-        casillas[1][3] = 1;
-        casillas[1][7] = 1;
-
-         */
-/*
-        casillas[1][0] = 1;
-        casillas[1][1] = 1;
-        casillas[1][2] = 1;
-*/
-
-
     }
 
     public static int contarHipotenochasAlrededor(int[][] casillas, int celdaX, int celdaY) {
@@ -121,17 +92,4 @@ public class Tablero {
         Random random = new Random();
         return random.nextInt(max - min) + min;
     }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int[] casilla : casillas) {
-            for (int value : casilla) {
-                stringBuilder.append(value).append(" ");
-            }
-            stringBuilder.append("\n");
-        }
-        return stringBuilder.toString();
-    }
-
 }

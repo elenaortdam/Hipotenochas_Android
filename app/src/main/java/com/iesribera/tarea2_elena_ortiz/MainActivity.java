@@ -28,25 +28,23 @@ import com.iesribera.tarea2_elena_ortiz.personajes.Personaje;
 import com.iesribera.tarea2_elena_ortiz.personajes.PersonajeAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
 
     private final ArrayList<Personaje> personajes = new ArrayList<>();
     private Personaje personajeSeleccionado;
-    private GridLayout grid;
     private Tablero tablero;
     private Nivel nivel = new NivelFacil();
     private Casilla[][] casillas;
-    private final int dificultad = 0;
     private int hipotenochasRestantes;
-    private final List<Casilla> despejadas = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Creamos los personajes y los añadimos a la lista
         Personaje oreo = new Personaje("Oreo", ContextCompat.getDrawable(this, R.drawable.android_oreo));
         Personaje kitkat = new Personaje("Kitkat", ContextCompat.getDrawable(this, R.drawable.android_kitkat));
         Personaje ginger = new Personaje("GingerBread", ContextCompat.getDrawable(this, R.drawable.android_gingerbread));
@@ -111,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         items[0] = getString(R.string.nivel_facil);
         items[1] = getString(R.string.nivel_medio);
         items[2] = getString(R.string.nivel_avanzado);
+        int dificultad = 0;
         builder.setTitle(R.string.titulo_nivel)
                 .setSingleChoiceItems(items, dificultad, new DialogInterface.OnClickListener() {
                     @Override
@@ -154,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public Casilla[][] crearPartida(Nivel nivel) {
-        grid = findViewById(R.id.grid);
+        GridLayout grid = findViewById(R.id.grid);
         grid.removeAllViews();
         grid.setColumnCount(nivel.getColumnas());
         grid.setRowCount(nivel.getFilas());
@@ -183,11 +182,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 casilla.setPulsada(false);
                 casilla.setText(String.valueOf(tablero.getCasillas()[i][j]));
                 casilla.setPadding(0, 0, 0, 0);
-                //TODO: elena descomentar
-                //   casillas[i][j].setBackgroundResource(R.drawable.my_button_bg);
+                casillas[i][j].setBackgroundResource(R.drawable.my_button_bg);
                 casilla.setTextColor(Color.BLACK);
-                casilla.setTag(i + ";" + j);
-
                 casilla.setOnClickListener(this);
                 casilla.setOnLongClickListener(this);
                 grid.addView(casilla);
@@ -221,44 +217,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (casilla.getText().equals(String.valueOf(Constantes.SIN_HIPOTENOCHAS_ALREDEDOR))) {
             casilla.setText("");
             casilla.setBackgroundColor(Color.RED);
-            despejar(casilla, despejadas);
+            despejar(casilla);
         } else {
+            casilla.setBackgroundColor(Color.WHITE);
             casilla.setText(String.valueOf(casilla.getText()));
         }
         casilla.setEnabled(false);
         casilla.setPulsada(true);
     }
 
-    public void despejar(Casilla casilla, List<Casilla> despejadas) {
-        for (Casilla despejada : despejadas) {
-            if (despejada.getTag().equals(casilla.getTag())) {
-                return;
-            }
-        }
+    public void despejar(Casilla casilla) {
+        //Recorremos las casillas de alrededor
         for (int i = casilla.getFila() - 1; i <= casilla.getFila() + 1; i++) {
             for (int j = casilla.getColumna() - 1; j <= casilla.getColumna() + 1; j++) {
                 try {
                     Casilla casillaActual = casillas[i][j];
                     if (!casillaActual.isPulsada()) {
-                        //  despejadas.add(casillaActual);
                         casillaActual.setTextColor(Color.BLACK);
+                        //Si no tiene hipotenochas volvemos a llamar al método para ver las casillas de alrededor
                         if (casillaActual.getText().equals(String.valueOf(Constantes.SIN_HIPOTENOCHAS_ALREDEDOR))) {
                             casillaActual.setText("");
                             casillaActual.setBackgroundColor(Color.RED);
                             casillaActual.setEnabled(false);
                             casillaActual.setClickable(false);
                             casillaActual.setPulsada(true);
-                            despejar(casillaActual, despejadas);
-                        } else if (casillaActual.getText() != "" && Integer.parseInt(String.valueOf(casillaActual.getText()))
-                                > Constantes.SIN_HIPOTENOCHAS_ALREDEDOR) {
+                            despejar(casillaActual);
+                            //Si tiene más de 0 desvelamos el número de hipotenochas alrededor
+                        } else if (casillaActual.getText() != ""
+                                && Integer.parseInt(String.valueOf(casillaActual.getText())) > Constantes.SIN_HIPOTENOCHAS_ALREDEDOR) {
                             casillaActual.setEnabled(false);
                             casillaActual.setPulsada(true);
                             casillaActual.setClickable(false);
+                            casillaActual.setBackgroundColor(Color.WHITE);
                             casillaActual.setText(casillaActual.getText());
                         }
 
                     }
-
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
 
